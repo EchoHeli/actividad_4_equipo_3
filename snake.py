@@ -1,11 +1,12 @@
-"""Snake, classic arcade game.
+"""
+Serpiente, juego clásico de arcade.
 
-Exercises
+Ejercicios
 
-1. How do you make the snake faster or slower?
-2. How can you make the snake go around the edges?
-3. How would you move the food?
-4. Change the snake to respond to mouse clicks.
+1. ¿Cómo haces la serpiente más rápida o más lenta?
+2. ¿Cómo haces que la serpiente atraviese los bordes?
+3. ¿Cómo moverías la comida?
+4. Cambia la serpiente para responder a clics del mouse.
 """
 
 from random import randrange
@@ -13,68 +14,83 @@ from turtle import *
 
 from freegames import square, vector
 
-food = vector(0, 0)
-snake = [vector(10, 0)]
-aim = vector(0, -10)
+# Posición de la comida
+comida = vector(0, 0)
+
+# Cuerpo inicial de la serpiente
+serpiente = [vector(10, 0)]
+
+# Dirección inicial de movimiento
+direccion = vector(0, -10)
 
 
-def change(x, y):
+def cambiar_direccion(x, y):
     """Cambia la dirección de la serpiente."""
-    aim.x = x
-    aim.y = y
+    direccion.x = x
+    direccion.y = y
 
 
-def inside(head):
+def dentro_limites(cabeza):
     """Verifica si la cabeza está dentro de los límites."""
-    return -200 < head.x < 190 and -200 < head.y < 190
+    return -200 < cabeza.x < 190 and -200 < cabeza.y < 190
 
 
-def move():
+def mover():
     """Mueve la serpiente un segmento hacia adelante."""
-    head = snake[-1].copy()
-    head.move(aim)
 
-    if not inside(head) or head in snake:
-        # Cambia el color al perder
-        square(head.x, head.y, 9, 'red')
+    # Copia la posición de la cabeza
+    cabeza = serpiente[-1].copy()
+
+    # Mueve la cabeza según la dirección
+    cabeza.move(direccion)
+
+    # Verifica si perdió
+    if not dentro_limites(cabeza) or cabeza in serpiente:
+        square(cabeza.x, cabeza.y, 9, 'red')
         update()
         return
 
-    snake.append(head)
+    # Agrega nueva cabeza
+    serpiente.append(cabeza)
 
-    if head == food:
-        print('Snake:', len(snake))
-        food.x = randrange(-15, 15) * 10
-        food.y = randrange(-15, 15) * 10
+    # Verifica si comió la comida
+    if cabeza == comida:
+        print('Puntaje:', len(serpiente))
+
+        comida.x = randrange(-15, 15) * 10
+        comida.y = randrange(-15, 15) * 10
     else:
-        snake.pop(0)
+        # Elimina la cola para simular movimiento
+        serpiente.pop(0)
 
     clear()
 
-    for body in snake:
-        # Se cambió el color de la serpiente a azul
-        square(body.x, body.y, 9, 'blue')
+    # Dibuja la serpiente
+    for parte in serpiente:
+        square(parte.x, parte.y, 9, 'blue')
 
-    # Se cambió el color de la comida a amarillo
-    square(food.x, food.y, 9, 'yellow')
+    # Dibuja la comida
+    square(comida.x, comida.y, 9, 'yellow')
 
     update()
 
-    # Se aumentó ligeramente la velocidad del juego
-    ontimer(move, 70)
+    # Velocidad del juego
+    ontimer(mover, 70)
 
 
-# Se aumentó el tamaño de la ventana
+# Configuración de la ventana
 setup(600, 600, 370, 0)
 
 hideturtle()
 tracer(False)
 listen()
 
-onkey(lambda: change(10, 0), 'Right')
-onkey(lambda: change(-10, 0), 'Left')
-onkey(lambda: change(0, 10), 'Up')
-onkey(lambda: change(0, -10), 'Down')
+# Controles del teclado
+onkey(lambda: cambiar_direccion(10, 0), 'Right')
+onkey(lambda: cambiar_direccion(-10, 0), 'Left')
+onkey(lambda: cambiar_direccion(0, 10), 'Up')
+onkey(lambda: cambiar_direccion(0, -10), 'Down')
 
-move()
+# Inicia el juego
+mover()
 done()
