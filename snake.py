@@ -10,7 +10,7 @@ Ejercicios
 
 # Importacion de modulos necesarios
 from random import randrange  # Para generar posiciones aleatorias de la comida
-from turtle import *  # Modulo grafico para dibujar en pantalla
+from turtle import *
 
 # Funciones auxiliares de freegames: square dibuja cuadrados y vector maneja
 # coordenadas en 2D
@@ -54,7 +54,7 @@ def move():
 
     # Si la cabeza sale del area o choca con el cuerpo, se pierde la partida
     if not inside(head) or head in snake:
-        # Se dibuja un cuadrado rojo (cambiado a tamano 12) marcando el final
+        # Se dibuja un cuadrado rojo (tamano 12) marcando el final
         square(head.x, head.y, 12, 'red')
         update()
         return
@@ -75,4 +75,29 @@ def move():
     # Se limpia la pantalla antes de volver a dibujar
     clear()
 
-    # Se dibuja cada segmento de la serpiente en color azul (cambio visu
+    # Se dibuja cada segmento de la serpiente en color azul (cambio visual)
+    for body in snake:
+        square(body.x, body.y, 12, 'blue')
+
+    # Se dibuja la comida en color morado (cambio visual)
+    square(food.x, food.y, 12, 'purple')
+    update()
+    # Proxima llamada a move cada 80 ms (mas rapido que el original de 100)
+    ontimer(move, 80)
+
+
+# Configuracion de la ventana del juego (ampliada de 420x420 a 520x520)
+setup(520, 520, 370, 0)
+hideturtle()
+tracer(False)
+listen()
+
+# Asociacion de las flechas del teclado con la funcion change
+onkey(lambda: change(10, 0), 'Right')
+onkey(lambda: change(-10, 0), 'Left')
+onkey(lambda: change(0, 10), 'Up')
+onkey(lambda: change(0, -10), 'Down')
+
+# Inicia el ciclo del juego y mantiene la ventana abierta
+move()
+done()
