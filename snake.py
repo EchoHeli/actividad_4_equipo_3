@@ -10,7 +10,17 @@ Ejercicios
 """
 
 from random import randrange
-from turtle import *
+from turtle import (
+    setup,
+    hideturtle,
+    tracer,
+    listen,
+    onkey,
+    ontimer,
+    update,
+    clear,
+    done,
+)
 
 from freegames import square, vector
 
@@ -20,7 +30,7 @@ comida = vector(0, 0)
 # Cuerpo inicial de la serpiente
 serpiente = [vector(10, 0)]
 
-# Dirección inicial de movimiento
+# Dirección inicial
 direccion = vector(0, -10)
 
 
@@ -38,19 +48,15 @@ def dentro_limites(cabeza):
 def mover():
     """Mueve la serpiente un segmento hacia adelante."""
 
-    # Copia la posición de la cabeza
     cabeza = serpiente[-1].copy()
-
-    # Mueve la cabeza según la dirección
     cabeza.move(direccion)
 
-    # Verifica si perdió
+    # Verifica colisiones
     if not dentro_limites(cabeza) or cabeza in serpiente:
         square(cabeza.x, cabeza.y, 9, 'red')
         update()
         return
 
-    # Agrega nueva cabeza
     serpiente.append(cabeza)
 
     # Verifica si comió la comida
@@ -60,7 +66,6 @@ def mover():
         comida.x = randrange(-15, 15) * 10
         comida.y = randrange(-15, 15) * 10
     else:
-        # Elimina la cola para simular movimiento
         serpiente.pop(0)
 
     clear()
@@ -93,4 +98,5 @@ onkey(lambda: cambiar_direccion(0, -10), 'Down')
 
 # Inicia el juego
 mover()
+
 done()
