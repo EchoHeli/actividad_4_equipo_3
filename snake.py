@@ -19,22 +19,23 @@ aim = vector(0, -10)
 
 
 def change(x, y):
-    """Change snake direction."""
+    """Cambia la dirección de la serpiente."""
     aim.x = x
     aim.y = y
 
 
 def inside(head):
-    """Return True if head inside boundaries."""
+    """Verifica si la cabeza está dentro de los límites."""
     return -200 < head.x < 190 and -200 < head.y < 190
 
 
 def move():
-    """Move snake forward one segment."""
+    """Mueve la serpiente un segmento hacia adelante."""
     head = snake[-1].copy()
     head.move(aim)
 
     if not inside(head) or head in snake:
+        # Cambia el color al perder
         square(head.x, head.y, 9, 'red')
         update()
         return
@@ -51,20 +52,29 @@ def move():
     clear()
 
     for body in snake:
-        square(body.x, body.y, 9, 'black')
+        # Se cambió el color de la serpiente a azul
+        square(body.x, body.y, 9, 'blue')
 
-    square(food.x, food.y, 9, 'green')
+    # Se cambió el color de la comida a amarillo
+    square(food.x, food.y, 9, 'yellow')
+
     update()
-    ontimer(move, 100)
+
+    # Se aumentó ligeramente la velocidad del juego
+    ontimer(move, 70)
 
 
-setup(420, 420, 370, 0)
+# Se aumentó el tamaño de la ventana
+setup(600, 600, 370, 0)
+
 hideturtle()
 tracer(False)
 listen()
+
 onkey(lambda: change(10, 0), 'Right')
 onkey(lambda: change(-10, 0), 'Left')
 onkey(lambda: change(0, 10), 'Up')
 onkey(lambda: change(0, -10), 'Down')
+
 move()
 done()
